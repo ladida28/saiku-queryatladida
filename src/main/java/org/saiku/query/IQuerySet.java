@@ -15,9 +15,9 @@
  */
 package org.saiku.query;
 
-import java.util.List;
-
 import org.saiku.query.mdx.IFilterFunction;
+
+import java.util.List;
 
 public interface IQuerySet {
 	

@@ -15,12 +15,12 @@
  */
 package org.saiku.query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.olap4j.Axis;
 import org.olap4j.impl.Named;
 import org.olap4j.metadata.Measure;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueryDetails implements Named {
 
@@ -31,8 +31,9 @@ public class QueryDetails implements Named {
 	private Axis axis;
 
 	private Query query;
-	
-	public enum Location {
+
+
+  public enum Location {
 		TOP,
 		BOTTOM
 	}
@@ -47,8 +48,9 @@ public class QueryDetails implements Named {
 			measures.add(measure);
 		}
 	}
-	
-	public void set(Measure measure, int position) {
+
+
+  public void set(Measure measure, int position) {
 		if (!measures.contains(measure)) {
 			measures.add(position, measure);
 		} else {

@@ -15,12 +15,13 @@
  */
 package org.saiku.query.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 import org.saiku.query.IQuerySet;
 import org.saiku.query.ISortableQuerySet;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class QueryUtil {
 	
@@ -56,9 +57,11 @@ public class QueryUtil {
 	
 	public static List<String> retrieveSetParameters(IQuerySet qs) {
 		List<String> parameterNames = new ArrayList<String>();
-		
-		String mdx = qs.getMdxSetExpression();
-		List<String> mdxParameters = parseParameters(mdx);
+
+      String mdx = qs.getMdxSetExpression();
+
+      List<String> mdxParameters = parseParameters(mdx);
+
 		parameterNames.addAll(mdxParameters);
 		
 //		MdxParser parser = new DefaultMdxParserImpl();

@@ -15,9 +15,7 @@
  */
 package org.saiku.query;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import org.saiku.query.metadata.CalculatedMember;
 
 import org.olap4j.OlapException;
 import org.olap4j.impl.IdentifierParser;
@@ -28,7 +26,10 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.NamedList;
-import org.saiku.query.metadata.CalculatedMember;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
 
@@ -233,7 +234,7 @@ public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
     }
     
     public void excludeCalculatedMember(CalculatedMember m) throws OlapException {
-    	calculatedMembers.remove(m);
+    	//calculatedMembers.remove(m);
     	activeCalculatedMembers.remove(m);
     }
     
