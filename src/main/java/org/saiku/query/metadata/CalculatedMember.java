@@ -15,23 +15,19 @@
  */
 package org.saiku.query.metadata;
 
+import org.olap4j.OlapException;
+import org.olap4j.impl.Named;
+import org.olap4j.impl.NamedListImpl;
+import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.IdentifierSegment;
+import org.olap4j.mdx.ParseTreeNode;
+import org.olap4j.metadata.*;
+import org.olap4j.metadata.Measure.Aggregator;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.olap4j.OlapException;
-import org.olap4j.impl.Named;
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.IdentifierSegment;
-import org.olap4j.mdx.ParseTreeNode;
-import org.olap4j.metadata.Dimension;
-import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Measure.Aggregator;
-import org.olap4j.metadata.Member;
-import org.olap4j.metadata.NamedList;
-import org.olap4j.metadata.Property;
 
 public class CalculatedMember implements Member, Named, Calculated {
 
@@ -279,8 +275,9 @@ public class CalculatedMember implements Member, Named, Calculated {
 	 */
 	@Deprecated
 	public NamedList<Property> getProperties() {
-		// TODO Auto-generated method stub
-		return null;
+	  NamedList l = new NamedListImpl(properties.entrySet());
+	  return l;
+
 	}
 
 
