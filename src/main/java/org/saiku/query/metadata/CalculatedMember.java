@@ -286,8 +286,10 @@ public class CalculatedMember implements Member, Named, Calculated {
 	 * DO NOT USE THIS
 	 */
 	@Deprecated
-	public Object getPropertyValue(Property arg0) throws OlapException {
-		// TODO Auto-generated method stub
+	public Object getPropertyValue(Property p) throws OlapException {
+		if (properties.containsKey(p.getName())) {
+			return properties.get(p.getName());
+		}
 		return null;
 	}
 

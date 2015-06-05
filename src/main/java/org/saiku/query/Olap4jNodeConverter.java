@@ -114,7 +114,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 				for(QueryHierarchy h : axis.getQueryHierarchies()) {
 					ParseTreeNode hierarchyNode = toHierarchy(withList, h);
 					if (!isFilter) {
-						WithSetNode withNode = new WithSetNode(null, getIdentifier(axis, h), hierarchyNode);
+						WithSetNode withNode = new WithSetNode(null, getIdentifier(axis.getName(), h.getHierarchy().getDimension().getName(), h.getName()), hierarchyNode);
 						withList.add(withNode);		
 						hierarchies.add(withNode.getIdentifier());
 					} else {
@@ -131,7 +131,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 //		TODO - it seems like its better to have the crossjoin as close to the NON EMPTY axis etc. as possible in mondrian 3 - works ok in mondrian 4
 		ParseTreeNode axisNode = null;
 		if ((flavor != null && !BackendFlavor.SSAS.equals(flavor)) && axisExpression != null && axisAsSet) {
-			WithSetNode withNode = new WithSetNode(null, getIdentifier(axis), axisExpression);
+			WithSetNode withNode = new WithSetNode(null, getIdentifier(axis.getName()), axisExpression);
 			withList.add(withNode);
 			axisNode = withNode.getIdentifier();
 		} else {
@@ -198,7 +198,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 					firstComplex = i;
 					ParseTreeNode levelNode = toLevel(l);
 					levelNode = toQuerySet(levelNode, l);
-					existSet = getIdentifier(h, l);
+					existSet = getIdentifier(h.getHierarchy().getDimension().getName(), h.getName(), l.getName());
 					break;
 				}
 			}
@@ -212,7 +212,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 					levelNode = new CallNode(null, "Exists", Syntax.Function, levelNode, existSet);
 				}
 				if (!allSimple && h.getActiveQueryLevels().size() > 1) {
-					WithSetNode withNode = new WithSetNode(null, getIdentifier(h, l), levelNode);
+					WithSetNode withNode = new WithSetNode(null, getIdentifier(h.getHierarchy().getDimension().getName(), h.getName(), l.getName()), levelNode);
 					withList.add(withNode);
 					levelNode = withNode.getIdentifier();
 					if (!l.isSimple() || (existSet != null && i > firstComplex)) {
@@ -321,11 +321,21 @@ public class Olap4jNodeConverter extends NodeConverter {
 		baseNode = generateSetCall(baseNode);
 		
 		if (level.isRange()) {
-			List<ParseTreeNode> args = new ArrayList<ParseTreeNode>();
-			args.add(new MemberNode(null, level.getRangeStart()));
-			args.add(new MemberNode(null, level.getRangeEnd()));
-			
-			baseNode = new CallNode(null, ":", Syntax.Infix, args);
+			if (level.getRangeStart() != null && level.getRangeEnd() != null) {
+				List<ParseTreeNode> args = new ArrayList<ParseTreeNode>();
+				args.add(new MemberNode(null, level.getRangeStart()));
+				args.add(new MemberNode(null, level.getRangeEnd()));
+				baseNode = new CallNode(null, ":", Syntax.Infix, args);
+			} else {
+				String startExpr = level.getRangeStartExpr();
+				String endExpr = level.getRangeEndExpr();
+				if (StringUtils.isBlank(endExpr)) {
+					baseNode = toMdxNode(startExpr);
+				} else {
+					baseNode = toMdxNode(startExpr + " : " + endExpr);
+				}
+				
+			}
 		}
 		if (inclusions.size() > 0) {
 			baseNode = toOlap4jMemberSet(inclusions);
@@ -372,11 +382,16 @@ public class Olap4jNodeConverter extends NodeConverter {
 			return resolvedList;
 	}
 	
+	private static ParseTreeNode toMdxNode(String mdx) {
+		MdxParser parser = new DefaultMdxParserImpl();
+		ParseTreeNode expression =  parser.parseExpression(mdx);
+		return expression;
+	}
+	
 	private static ParseTreeNode toQuerySet(ParseTreeNode expression, IQuerySet o) {
 		MdxParser parser = new DefaultMdxParserImpl();
-
 		if (o.isMdxSetExpression()) {
-			expression =  parser.parseExpression("{" + o.getMdxSetExpression() + "}");
+			expression =  toMdxNode("{" + o.getMdxSetExpression() + "}");
 		}
 
 		if (expression != null && o.getFilters().size() > 0) {

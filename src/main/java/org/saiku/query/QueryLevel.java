@@ -33,9 +33,13 @@ public class QueryLevel extends AbstractQuerySet implements Named {
 	private List<Member> exclusions = new ArrayList<Member>();
 	private Member rangeStart = null;
 	private Member rangeEnd = null;
+	private String rangeStartExpr = null;
+	private String rangeEndExpr = null;
+	private String rangeStartSyn;
+	private String rangeEndSyn;
 	private String parameterName = null;
 	private SelectionType parameterSelectionType = Parameter.SelectionType.INCLUSION;
-
+	
     public QueryLevel(QueryHierarchy hierarchy, Level level) {
         super();
         this.hierarchy = hierarchy;
@@ -62,12 +66,13 @@ public class QueryLevel extends AbstractQuerySet implements Named {
     @Override
     public boolean isSimple() {
     	return (super.isSimple() 
-    			&& (level.getLevelType().equals(Type.ALL) || (inclusions.isEmpty() && exclusions.isEmpty() && rangeStart == null && rangeEnd == null))
+    			&& (level.getLevelType().equals(Type.ALL) 
+    					|| (inclusions.isEmpty() && exclusions.isEmpty() && rangeStart == null && rangeEnd == null && rangeStartExpr == null && rangeEndExpr == null) )
     			&& (!hasParameter() || hierarchy.getQuery().getParameter(getParameterName()) == null));
     }
     
     public boolean isRange() {
-    	return (rangeStart != null && rangeEnd != null);
+    	return ((rangeStart != null && rangeEnd != null) || (rangeStartExpr != null || rangeEndExpr != null));
     }
 
     /**
@@ -96,6 +101,22 @@ public class QueryLevel extends AbstractQuerySet implements Named {
 	public Member getRangeEnd() {
 		return rangeEnd;
 	}
+	
+	public String getRangeStartExpr() {
+		return rangeStartExpr;
+	}
+	
+	public String getRangeEndExpr() {
+		return rangeEndExpr;
+	}
+	
+	public String getRangeStartSyn() {
+		return rangeStartSyn;
+	}
+	
+	public String getRangeEndSyn() {
+		return rangeEndSyn;
+	}
 
     protected void include(Member m) {
     	if(!inclusions.contains(m)) {
@@ -117,6 +138,33 @@ public class QueryLevel extends AbstractQuerySet implements Named {
     	rangeEnd = end;
     }
     
+    public void setRangeSynonyms(String startSynonym, String endSynonym) {
+    	rangeStartSyn = startSynonym;
+    	rangeEndSyn = endSynonym;
+    }
+    
+    public void setRangeStartSynonym(String startSyn) {
+    	rangeStartSyn = startSyn;
+    }
+    public void setRangeEndSynonym(String endSyn) {
+    	rangeEndSyn = endSyn;
+    }
+
+    public void setRangeStartExpr(String startExp) {
+    	rangeStart = null;
+    	rangeStartExpr = startExp;
+    }
+    public void setRangeEndExpr(String endExp) {
+    	rangeEnd = null;
+    	rangeEndExpr = endExp;
+    }
+
+    public void setRangeExpressions(String startExpr, String endExpr) {
+    	rangeStart = null;
+    	rangeEnd = null;
+    	rangeStartExpr = startExpr;
+    	rangeEndExpr = endExpr;
+    }    
 
     /* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
