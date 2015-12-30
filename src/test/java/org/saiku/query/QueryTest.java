@@ -1045,7 +1045,7 @@ String str = mdx.toString();
 			                + "SET [~COLUMNS] AS\n"
 			                + "    {[Product].[Drink]}\n"
 			                + "SET [~ROWS] AS\n"
-			                + "    ([Time].[1998].Lag(1) : [Time].[1998])\n"
+			                + "    {([Time].[1998].Lag(1) : [Time].[1998])}\n"
 			                + "SELECT\n"
 			                + "[~COLUMNS] ON COLUMNS,\n"
 			                + "[~ROWS] ON ROWS\n"

@@ -18,7 +18,8 @@ import org.saiku.query.mdx.IFilterFunction;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

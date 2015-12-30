@@ -121,7 +121,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 						hierarchies.add(hierarchyNode);
 					}
 				}
-				axisExpression = generateCrossJoin(hierarchies, axis.isNonEmpty(), true);
+				axisExpression = generateCrossJoin(hierarchies, axis.isNonEmpty(), isFilter);
 			} else {
 				// TODO do we need to handle hierarchy count == 0 ?
 			}
@@ -330,9 +330,9 @@ public class Olap4jNodeConverter extends NodeConverter {
 				String startExpr = level.getRangeStartExpr();
 				String endExpr = level.getRangeEndExpr();
 				if (StringUtils.isBlank(endExpr)) {
-					baseNode = toMdxNode(startExpr);
+					baseNode = generateSetCall(toMdxNode(startExpr));
 				} else {
-					baseNode = toMdxNode(startExpr + " : " + endExpr);
+					baseNode = generateSetCall(toMdxNode(startExpr + " : " + endExpr));
 				}
 				
 			}
