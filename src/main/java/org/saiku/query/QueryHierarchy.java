@@ -33,7 +33,8 @@ import java.util.List;
 
 public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
 
-	protected QueryAxis axis;
+  private final NamedList<RootMember> rootMembers = new NamedListImpl<RootMember>();
+  protected QueryAxis axis;
     private final Query query;
 	private final Hierarchy hierarchy;
 	
@@ -58,7 +59,18 @@ public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
             QueryLevel queryLevel = new QueryLevel(this, level);
             queryLevels.add(queryLevel);
         }
-    }
+
+	  try {
+		NamedList<Member> members = hierarchy.getRootMembers();
+		for(Member member:members){
+		  RootMember rootMember = new RootMember(this, member);
+		  rootMembers.add(rootMember);
+		}
+	  } catch (OlapException e) {
+		e.printStackTrace();
+	  }
+
+	}
 
     public Query getQuery() {
         return query;
@@ -170,7 +182,13 @@ public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
     	}
     	return ql;
     }
-
+  public QueryLevel includeMemberLevel(String levelName) {
+	QueryLevel ql = queryLevels.get(levelName);
+	if (ql != null && !activeLevels.contains(ql)) {
+	  activeLevels.add(ql);
+	}
+	return ql;
+  }
     public QueryLevel includeLevel(Level l) throws OlapException {
     	if (!l.getHierarchy().equals(hierarchy)) {
     		throw new OlapException(
@@ -183,7 +201,7 @@ public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
     	}
     	return ql;
     }
-    
+
     public void excludeLevel(String levelName) {
     	QueryLevel ql = queryLevels.get(levelName);
     	if (ql != null && activeLevels.contains(ql)) {

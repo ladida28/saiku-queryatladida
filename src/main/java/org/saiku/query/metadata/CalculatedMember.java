@@ -32,6 +32,7 @@ import java.util.Map;
 public class CalculatedMember implements Member, Named, Calculated {
 
 
+	private final Member parentMember;
 	private Dimension dimension;
 	private Hierarchy hierarchy;
 	private String name;
@@ -79,6 +80,7 @@ public class CalculatedMember implements Member, Named, Calculated {
 	        this.uniqueName = buf.toString();
 
 		}
+		this.parentMember = parentMember;
 		if (properties != null) {
 			this.properties.putAll(properties);
 		}
@@ -216,7 +218,7 @@ public class CalculatedMember implements Member, Named, Calculated {
 
 	@Override
 	public Member getParentMember() {
-		throw new UnsupportedOperationException();
+		return parentMember;
 	}
 
 
