@@ -15,11 +15,6 @@
  */
 package org.saiku.query.mdx;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.olap4j.mdx.CallNode;
 import org.olap4j.mdx.HierarchyNode;
 import org.olap4j.mdx.LiteralNode;
@@ -28,12 +23,18 @@ import org.olap4j.mdx.Syntax;
 import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.metadata.Hierarchy;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class NameLikeFilter extends AbstractFilterFunction {
 
+	private String op;
 	private List<String> filterExpression = new ArrayList<String>();
 	private MdxFunctionType type;
 	private Hierarchy hierarchy;
-
+	private String operator = " > ";
 	public NameLikeFilter(Hierarchy hierarchy, String... matchingExpression) {
 		List<String> expressions = Arrays.asList(matchingExpression);
 		this.filterExpression.addAll(expressions);
@@ -47,12 +48,29 @@ public class NameLikeFilter extends AbstractFilterFunction {
 		this.type = MdxFunctionType.Filter;
 	}
 
+	public NameLikeFilter(Hierarchy hierarchy, List<String> matchingExpression, String operator) {
+		this.hierarchy = hierarchy;
+		this.filterExpression.addAll(matchingExpression);
+		this.type = MdxFunctionType.Filter;
+		this.op = operator;
+		if(operator!=null && operator.equals("NOTEQUAL")){
+			this.operator = " = ";
+		}
+	}
+
 	@Override
 	public List<ParseTreeNode> getArguments(MdxParser parser) {
 		List<ParseTreeNode> filters = new ArrayList<ParseTreeNode>();
 		List<ParseTreeNode> arguments = new ArrayList<ParseTreeNode>();
 		ParseTreeNode h =  new HierarchyNode(null, hierarchy);
-		for (String filter : filterExpression) {
+
+		for (int i = 0; i< filterExpression.size(); i++) {
+			String filter = filterExpression.get(i);
+
+			String o = operator;
+			if(filterExpression.size()>1 && i == 0){
+				o = " > ";
+			}
 			ParseTreeNode filterExp =  LiteralNode.createString(null, filter);
 			CallNode currentMemberNode =
 					new CallNode(
@@ -67,7 +85,7 @@ public class NameLikeFilter extends AbstractFilterFunction {
 							Syntax.Property,
 							currentMemberNode);
 
-			CallNode instrNode = 
+			CallNode instrNode =
 					new CallNode(
 							null,
 							"Instr",
@@ -75,22 +93,22 @@ public class NameLikeFilter extends AbstractFilterFunction {
 							currentMemberNameNode,
 							filterExp);
 
-			CallNode filterNode = 
+			CallNode filterNode =
 					new CallNode(
 							null,
-							" > ",
+							o,
 							Syntax.Infix,
 							instrNode,
 							LiteralNode.createNumeric(null, new BigDecimal(0), true));
-			
-			filters.add(filterNode);			
+
+			filters.add(filterNode);
 		}
 		if (filters.size() == 1) {
 			arguments.addAll(filters);
 		} else if (filters.size() > 1) {
 			ParseTreeNode allfilter = filters.get(0);
 			for (int i = 1; i< filters.size(); i++) {
-				allfilter = 
+				allfilter =
 						new CallNode(
 								null,
 								" OR ",
@@ -120,5 +138,9 @@ public class NameLikeFilter extends AbstractFilterFunction {
 	 */
 	public Hierarchy getHierarchy() {
 		return hierarchy;
+	}
+
+	public String getOp() {
+		return op;
 	}
 }
