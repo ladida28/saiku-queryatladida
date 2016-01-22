@@ -32,6 +32,7 @@ import java.util.Map;
 public class CalculatedMember implements Member, Named, Calculated {
 
 
+
 	private final Member parentMember;
 	private Dimension dimension;
 	private Hierarchy hierarchy;
@@ -63,7 +64,8 @@ public class CalculatedMember implements Member, Named, Calculated {
 		this.memberType = memberType;
 		this.formula = formula;
 		if (parentMember == null) {
-			this.uniqueName = IdentifierNode.ofNames(hierarchy.getName(), name).toString();
+			this.uniqueName = IdentifierNode.ofNames(hierarchy.getDimension().getName(), hierarchy.getName(), name)
+											.toString();
 		} else {
 			IdentifierNode parent = IdentifierNode.parseIdentifier(parentMember.getUniqueName());
 			IdentifierNode cm = IdentifierNode.ofNames(name);
