@@ -1,2 +1,6 @@
 target/
 saiku-query.iml
+.idea/
+.settings/
+.classpath
+.DS_Store
