@@ -57,6 +57,12 @@ public class Olap4jNodeConverter extends NodeConverter {
 		List<IdentifierNode> cellpropertyList = Collections.emptyList();
 		List<ParseTreeNode> withList = new ArrayList<ParseTreeNode>();
 		List<QueryAxis> axisList = new ArrayList<QueryAxis>();
+
+		for(CalculatedMember c: query.getCalculatedMembers()){
+			WithMemberNode wm = toOlap4jCalculatedMember(c);
+			withList.add(wm);
+		}
+
 		axisList.add(query.getAxes().get(Axis.COLUMNS));
 		axisList.add(query.getAxes().get(Axis.ROWS));
 
@@ -138,7 +144,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 			axisNode = axisExpression;
 		}
 		QueryDetails details = axis.getQuery().getDetails();
-		
+
 		if (details.getMeasures().size() > 0 && axis.getLocation().equals(details.getAxis())) {
 			for (Measure m : details.getMeasures()) {
 				if (m.isCalculatedInQuery()) {
