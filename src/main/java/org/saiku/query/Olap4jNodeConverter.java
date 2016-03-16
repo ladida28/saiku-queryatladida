@@ -252,7 +252,7 @@ public class Olap4jNodeConverter extends NodeConverter {
 			List<ParseTreeNode> cmNodes = new ArrayList<ParseTreeNode>();
 			for (CalculatedMember cm : h.getActiveCalculatedMembers()) {
 				WithMemberNode wm = toOlap4jCalculatedMember(cm);
-				withList.add(wm);
+				//withList.add(wm);*/
 				cmNodes.add(wm.getIdentifier());
 			}
 			if (cmNodes.size() > 0) {
