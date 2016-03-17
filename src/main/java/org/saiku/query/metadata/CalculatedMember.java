@@ -45,6 +45,26 @@ public class CalculatedMember implements Member, Named, Calculated {
 	private String description;
 	private Level level;
 
+	public CalculatedMember(
+			Dimension dimension,
+			Hierarchy hierarchy,
+			String name,
+			String description,
+			Member parentMember,
+			Type memberType,
+			String formula,
+			Map<String, String> properties, String l)
+	{
+		this(dimension,hierarchy,name,description,parentMember,memberType,formula,properties);
+		if(l!=null) {
+			for(Level level:hierarchy.getLevels()){
+				if(level.getUniqueName().equals(l)){
+					this.level = level;
+				}
+			}
+
+		}
+	}
 
 	public CalculatedMember(
 			Dimension dimension,

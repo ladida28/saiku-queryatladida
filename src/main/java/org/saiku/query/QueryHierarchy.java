@@ -238,7 +238,7 @@ public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
     }
 
 
-    public void includeCalculatedMember(CalculatedMember m) throws OlapException {
+    public void includeCalculatedMember(CalculatedMember m, boolean include) throws OlapException {
     	Hierarchy h = m.getHierarchy();
     	if (!h.equals(hierarchy)) {
     		throw new OlapException(
@@ -248,7 +248,16 @@ public class QueryHierarchy extends AbstractSortableQuerySet implements Named {
     	if(!calculatedMembers.contains(m)) {
     		calculatedMembers.add(m);
     	}
-    	activeCalculatedMembers.add(m);
+		if(include){
+		QueryLevel ql = queryLevels.get(m.getLevel().getName());
+
+		ql.include(m);
+		}
+		else{
+			activeCalculatedMembers.add(m);
+
+		}
+
     }
     
     public void excludeCalculatedMember(CalculatedMember m) throws OlapException {

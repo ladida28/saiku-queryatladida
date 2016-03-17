@@ -366,7 +366,7 @@ String str = mdx.toString();
 							"Aggregate({Product.Drink, Product.Food})",  
 							null);
 
-			products.includeCalculatedMember(cm);
+			products.includeCalculatedMember(cm, false);
 			products.includeLevel("Product Family");
 			products.excludeMember("[Product].[Non-Consumable]");
 			NFilter top2filter = new NFilter(MdxFunctionType.TopCount, 2, "Measures.[Unit Sales]");
@@ -459,7 +459,7 @@ String str = mdx.toString();
 							"Aggregate({[Product].[Drink].[Beverages], [Product].[Drink].[Dairy]})",  
 							null);
 
-			products.includeCalculatedMember(cm);
+			products.includeCalculatedMember(cm, false);
 			columns.addHierarchy(products);
 
 			QueryHierarchy gender = query.getHierarchy("[Gender]");
