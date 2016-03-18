@@ -287,7 +287,7 @@ public class Query {
     		QueryHierarchy hierarchy,
     		String name,
     		String formula,
-    		Map<Property, Object> properties) 
+    		Map<Property, Object> properties, boolean mondrian3)
     {
     	Hierarchy h = hierarchy.getHierarchy();
     	CalculatedMember cm = new CalculatedMember(
@@ -298,7 +298,7 @@ public class Query {
     			null,
     			Type.FORMULA,
     			formula,
-    			null);
+    			null, mondrian3);
     	addCalculatedMember(hierarchy, cm);
     	return cm;
     }
@@ -308,7 +308,7 @@ public class Query {
     		Member parentMember,
     		String name,
     		String formula,
-    		Map<Property, Object> properties) 
+    		Map<Property, Object> properties, boolean mondrian3)
     {
     	Hierarchy h = hierarchy.getHierarchy();
     	CalculatedMember cm = new CalculatedMember(
@@ -319,7 +319,7 @@ public class Query {
     			parentMember,
     			Type.FORMULA,
     			formula,
-    			null);
+    			null, mondrian3);
     	addCalculatedMember(hierarchy, cm);
     	return cm;
     }

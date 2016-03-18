@@ -53,15 +53,19 @@ public class CalculatedMember implements Member, Named, Calculated {
 			Member parentMember,
 			Type memberType,
 			String formula,
-			Map<String, String> properties, String l)
+			Map<String, String> properties, String l, boolean mondrian3)
 	{
-		this(dimension,hierarchy,name,description,parentMember,memberType,formula,properties);
-		if(l!=null) {
+		this(dimension,hierarchy,name,description,parentMember,memberType,formula,properties,mondrian3);
+		if(l!=null && !l.equals("")) {
 			for(Level level:hierarchy.getLevels()){
 				if(level.getUniqueName().equals(l)){
 					this.level = level;
 				}
 			}
+
+		}
+		else{
+			this.level = hierarchy.getLevels().get(0);
 
 		}
 	}
@@ -74,7 +78,7 @@ public class CalculatedMember implements Member, Named, Calculated {
 			Member parentMember,
 			Type memberType,
 			String formula,
-			Map<String, String> properties)
+			Map<String, String> properties, boolean mondrian3)
 	{
 		this.dimension = dimension;
 		this.hierarchy = hierarchy;
@@ -84,8 +88,14 @@ public class CalculatedMember implements Member, Named, Calculated {
 		this.memberType = memberType;
 		this.formula = formula;
 		if (parentMember == null) {
-			this.uniqueName = IdentifierNode.ofNames(hierarchy.getDimension().getName(), hierarchy.getName(), name)
-											.toString();
+			if(mondrian3){
+				this.uniqueName = IdentifierNode.ofNames(hierarchy.getName(), name).toString();
+
+			}
+			else {
+				this.uniqueName = IdentifierNode.ofNames(hierarchy.getDimension().getName(), hierarchy.getName(), name)
+												.toString();
+			}
 		} else {
 			IdentifierNode parent = IdentifierNode.parseIdentifier(parentMember.getUniqueName());
 			IdentifierNode cm = IdentifierNode.ofNames(name);

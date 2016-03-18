@@ -364,7 +364,7 @@ String str = mdx.toString();
 							products, 
 							"Consumable", 
 							"Aggregate({Product.Drink, Product.Food})",  
-							null);
+							null, true);
 
 			products.includeCalculatedMember(cm, false);
 			products.includeLevel("Product Family");
@@ -456,8 +456,8 @@ String str = mdx.toString();
 							products,
 							parent,
 							"BeverageDairy", 
-							"Aggregate({[Product].[Drink].[Beverages], [Product].[Drink].[Dairy]})",  
-							null);
+							"Aggregate({[Product].[Drink].[Beverages], [Product].[Drink].[Dairy]})",
+							null,true);
 
 			products.includeCalculatedMember(cm, false);
 			columns.addHierarchy(products);
