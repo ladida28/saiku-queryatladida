@@ -129,7 +129,8 @@ public class MondrianOlap4jLevel
      */
     NamedList<Property> getProperties(boolean includeStandard) {
         final NamedList<Property> list = new ArrayNamedListImpl<Property>() {
-            public String getName(Object property) {
+
+			public String getName(Object property) {
                 return ((Property)property).getName();
             }
         };

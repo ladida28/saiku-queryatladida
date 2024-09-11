@@ -24,8 +24,8 @@
 	</distributionManagement>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 	<build>
 		<plugins>
@@ -76,13 +76,40 @@
 		</plugins>
 	</build>
 	<repositories>
-        <repository>
+      <!--  <repository>
             <id>pentaho-third-party</id>
             <url>http://nexus.pentaho.org/content/repositories/proxied-3rd-party-releases/</url>
         </repository>
         <repository>
             <id>pentaho-public-release</id>
             <url>http://nexus.pentaho.org/content/repositories/pentaho-public-release-repos/</url>
+        </repository>-->
+         <repository>
+          <id>pentaho-public</id>
+          <name>Pentaho Public</name>
+          <url>https://repo.orl.eng.hitachivantara.com/artifactory/pnt-mvn/</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+          </snapshots>
+        </repository>
+
+    	<repository>
+    		<id>pentaho-releases</id>
+    		<url>https://repository.pentaho.org/artifactory/repo/</url>
+    	</repository>
+    	<repository>
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <layout>default</layout>
+            <url>https://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
 	</repositories>
 	<dependencies>
@@ -112,7 +139,7 @@
 		<dependency>
 			<groupId>pentaho</groupId>
 			<artifactId>mondrian</artifactId>
-			<version>3.9.0.2</version>
+			<version>9.4.0.0-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<groupId>javax.servlet</groupId>
@@ -143,10 +170,10 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!--<dependency>
 			<groupId>org.saiku</groupId>
 			<artifactId>saiku-query</artifactId>
 			<version>0.1-SNAPSHOT</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 </project>

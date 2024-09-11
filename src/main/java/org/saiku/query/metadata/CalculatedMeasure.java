@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import mondrian.olap.CellProperty;
+//import mondrian.olap.CellProperty;
 
 import org.olap4j.OlapException;
 import org.olap4j.impl.Named;
@@ -34,7 +34,7 @@ import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
-import org.olap4j.metadata.Property.StandardCellProperty;
+//import org.olap4j.metadata.Property.StandardCellProperty;
 
 public class CalculatedMeasure implements Measure, Named, Calculated {
 
